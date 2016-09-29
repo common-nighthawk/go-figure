@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+  "strings"
 	"log"
 	"path/filepath"
 )
@@ -25,7 +26,7 @@ func checkArgs() {
 }
 
 func printChars() {
-  input := os.Args[1]
+  input := strings.Join(os.Args[1:], " ")
   for r := 0 ; r < 6 ; r++ {
     printRow := ""
     for c := 0 ; c < len(input) ; c++ {
@@ -39,6 +40,8 @@ func printChars() {
         printRow = printRow + bigAlphas[bigAlphaIndex][r]
       } else if lilAlphaIndex >= 0 && lilAlphaIndex < 26 {
         printRow = printRow + lilAlphas[lilAlphaIndex][r]
+      } else if char == ' ' {
+        printRow = printRow + "   "
       } else {
 				log.Fatal("invalid input. only [a-zA-Z0-9]")
       }
