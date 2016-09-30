@@ -1,32 +1,20 @@
-package main
+package figure
 
 import (
 	"fmt"
-	"os"
-  "strings"
 	"log"
-	"path/filepath"
 )
 
 var digits    [10][]string
 var bigAlphas [26][]string
 var lilAlphas [26][]string
 
-func main() {
-  checkArgs()
+func Print(input string) {
   setAsciiMap()
-  printChars()
+  printChars(input)
 }
 
-func checkArgs() {
-  if len(os.Args) == 1 {
-    fmt.Printf("usage: %s <[a-zA-Z0-9]>\n", filepath.Base(os.Args[0]))
-    os.Exit(1)
-  }
-}
-
-func printChars() {
-  input := strings.Join(os.Args[1:], " ")
+func printChars(input string) {
   for r := 0 ; r < 6 ; r++ {
     printRow := ""
     for c := 0 ; c < len(input) ; c++ {
