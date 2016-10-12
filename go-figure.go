@@ -1,45 +1,48 @@
-// package figure
-package main
+package figure
 
 import (
 	"fmt"
 	"log"
   "os"
   "bufio"
+  "strconv"
 )
 
-// var yy = [][]string{{"32"},{"33"},{"34"},{"35"},{"36"},{"37"},{"38"},{"39"},{"40"},{"41"},{"42"},{"43"},{"44"},{"45"},{"46"},{"47"},{"47"},{"48"},{"49"},{"50"},{"51"},{"52"},{"53"},{"54"},{"55"},{"56"},{"57"},{"58"},{"59"},{"60"},{"61"},{"62"},{"63"},{"64"},{" AA  ", "A  A ", "AAAA ", "A  A ", "A  A ", "    ", "    "},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
-
-type figure struct {
-  phrase string
-  font string
+type Figure struct {
+  Phrase string
+  Font string
 }
 
-type font struct {
-  letters [][]string
-  height int
+type Font struct {
+  Letters [][]string
+  Height int
 }
 
-func NewFont(name string) font {
-  var fnt font
-  fnt.height = 7
-  fnt.letters = [][]string{{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{}}
+func NewFont(name string) Font {
+  var fnt Font
 
-  fnt.letters[0] = []string{ "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   " }
-  file, _ := os.Open("fonts/alphabet.flf")
+  file, _ := os.Open("/Users/Daniel/Documents/go-workspace/src/go-figure/fonts/alphabet.flf")
   defer file.Close()
   scanner := bufio.NewScanner(file)
+
+  fnt.Letters = append(fnt.Letters, []string{})
 
   counter := 0
   for scanner.Scan() {
     text := scanner.Text()
+    if fnt.Height == 0 && text[:4] == "flf2" {
+      fnt.Height, _ = strconv.Atoi(string(text[5]))
+    }
+
+
+    fnt.Letters = append(fnt.Letters, []string{})
     cutLength := 1
 
     if counter > 0 {
       if text[len(text)-2:] == "@@" {
         cutLength = 2
       }
-      fnt.letters[counter] = append(fnt.letters[counter], text[:len(text)-cutLength])
+      fnt.Letters[counter] = append(fnt.Letters[counter], text[:len(text)-cutLength])
     }
 
     if text == "@@@@@@@@" {
@@ -48,28 +51,25 @@ func NewFont(name string) font {
       counter += 1
     }
   }
+  for i := 0 ; i < fnt.Height ; i ++ {
+    fnt.Letters[0] = append(fnt.Letters[0], "   ")
+  }
 
   return fnt
 }
 
-func (f figure) Println(fnt font) {
-  for r := 0 ; r < fnt.height ; r++ {
+func (f Figure) Println(fnt Font) {
+  for r := 0 ; r < fnt.Height ; r++ {
     printRow := ""
-    for c := 0 ; c < len(f.phrase) ; c++ {
-      char := f.phrase[c]
+    for c := 0 ; c < len(f.Phrase) ; c++ {
+      char := f.Phrase[c]
       fontIndex := char - 32
       if true {
-        printRow = printRow + fnt.letters[fontIndex][r]
+        printRow = printRow + fnt.Letters[fontIndex][r]
       } else {
 				log.Fatal("invalid input.")
       }
     }
     fmt.Println(printRow)
   }
-}
-
-func main() {
-  daniel := figure{"DANIEL allen DEUTSCH", "alphabet"}
-  my_font := NewFont(daniel.font)
-  daniel.Println(my_font)
 }
