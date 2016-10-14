@@ -37,13 +37,15 @@ func NewFont(name string) Font {
     cutLength := 1
 
     if counter > 0 {
-      if len(text) > 1 && text[len(text)-2:] == "@@" {
+      if len(text) > 1 && (text[len(text)-2:] == "@@" || text[len(text)-2:] == "##") {
         cutLength = 2
       }
-      fnt.Letters[counter] = append(fnt.Letters[counter], text[:len(text)-cutLength])
+      if len(text) > 1 {
+        fnt.Letters[counter] = append(fnt.Letters[counter], text[:len(text)-cutLength])
+      }
     }
 
-    if len(text) > 1 && text[len(text)-2:] == "@@" {
+    if len(text) > 1 && (text[len(text)-2:] == "@@" || text[len(text)-2:] == "##") {
       counter ++
     }
   }
