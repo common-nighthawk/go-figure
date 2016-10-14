@@ -16,10 +16,6 @@ type figure struct {
 }
 
 func NewFigure(phrase string, fontName string) figure {
-  // TODO error handling for fontname with no flf file
-  if fontName == "" {
-    fontName = "alphabet"
-  }
   return figure{phrase, NewFont(fontName)}
 }
 

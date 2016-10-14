@@ -8,78 +8,79 @@ import (
   "regexp"
 )
 
+var hardBlanksBlacklist = [2]byte{'a', '2'}
+
 type font struct {
-  letters [][]string
-  height int
+  name string
   hardBlank byte
+  height int
+  letters [][]string
 }
 
-// func setHeight(font font, metadata string) font {
-//   r, _ := regexp.Compile(`\d+`)
-//   matches := r. FindAllString(text, -1)
-//   font.height, _ = strconv.Atoi(matches[1])
-// }
-
-// func setHardBlank(font font, metadata string) font {
-//   r, _ := regexp.Compile(`f\S+\s`)
-//   matches := r.FindAllString(text, -1)
-//   mymatch := matches[0]
-//   font.hardBlank = ' '
-//   if mymatch[len(mymatch)-2] != 'a' && mymatch[len(mymatch)-2] != '2' {
-//     font.hardBlank = mymatch[len(mymatch)-2]
-//   }
-// }
-
 func NewFont(name string) font {
-  var font font
+  font := font{name: name}
+  growLetters(&font)
+  setDefaults(&font)
 
   //TODO change path
-  file_path := fmt.Sprintf("../figure/fonts/%s.flf", name)
+  file_path := fmt.Sprintf("../figure/fonts/%s.flf", font.name)
   file, _ := os.Open(file_path)
   defer file.Close()
+
+  letterIndex := 0
   scanner := bufio.NewScanner(file)
-
-  font.letters = append(font.letters, []string{})
-  counter := 0
   for scanner.Scan() {
-    text := scanner.Text()
+    text, cutLength, indexInc := scanner.Text(), 1, 0
+    growLetters(&font)
     if font.height == 0 && text[:4] == "flf2" {
-      // setHeight(font, text)
-      // setHardBlank(font, text)
-
-      r, _ := regexp.Compile(`\d+`)
-      matches := r. FindAllString(text, -1)
-      font.height, _ = strconv.Atoi(matches[1])
-
-      r2, _ := regexp.Compile(`f\S+\s`)
-      matches2 := r2.FindAllString(text, -1)
-      mymatch := matches2[0]
-      font.hardBlank = ' '
-      if mymatch[len(mymatch)-2] != 'a' && mymatch[len(mymatch)-2] != '2' {
-        font.hardBlank = mymatch[len(mymatch)-2]
-      }
+      setHeight(&font, text)
+      setHardBlank(&font, text)
     }
-
-
-    font.letters = append(font.letters, []string{})
-    cutLength := 1
-
-    if counter > 0 {
-      if len(text) > 1 && (text[len(text)-2:] == "@@" || text[len(text)-2:] == "##" || text[len(text)-2:] == "$$") {
-        cutLength = 2
-      }
-      if len(text) > 1 {
-        font.letters[counter] = append(font.letters[counter], text[:len(text)-cutLength])
-      }
+    if lastCharLine(text) {
+      cutLength = 2
+      indexInc = 1
     }
-
-    if len(text) > 1 && (text[len(text)-2:] == "@@" || text[len(text)-2:] == "##" || text[len(text)-2:] == "$$") {
-      counter ++
+    if letterIndex > 0 && len(text) > 1 {
+      font.letters[letterIndex] = append(font.letters[letterIndex], text[:len(text)-cutLength])
     }
+    letterIndex += indexInc
   }
-  for i := 0 ; i < font.height ; i ++ {
-    font.letters[0] = append(font.letters[0], "   ")
-  }
-
   return font
+}
+
+func setDefaults (font *font) {
+  font.hardBlank = ' '
+  spaces := []string{"   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "}
+  font.letters[0] = spaces
+  //TODO: MAKE SURE FILE flf EXITS FOR NAME
+  if len(font.name) < 1 {
+    font.name = "alphabet"
+  }
+}
+
+func setHeight(font *font, metadata string) {
+  r, _ := regexp.Compile(`\d+`)
+  matches := r. FindAllString(metadata, -1)
+  font.height, _ = strconv.Atoi(matches[1])
+}
+
+func setHardBlank(font *font, metadata string) {
+  r, _ := regexp.Compile(`f\S+\s`)
+  match := r.FindAllString(metadata, -1)[0]
+  possibleHardBlank := match[len(match)-2]
+  if possibleHardBlank != hardBlanksBlacklist[0] && possibleHardBlank != hardBlanksBlacklist[1] {
+    font.hardBlank = possibleHardBlank
+  }
+}
+
+func growLetters(font *font) {
+  font.letters = append(font.letters, []string{})
+}
+
+func lastCharLine(text string) bool {
+  lastChars := "  "
+  if len(text) > 1 {
+    lastChars = text[len(text)-2:]
+  }
+  return lastChars == "@@" || lastChars == "##" || lastChars == "$$"
 }
