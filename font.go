@@ -27,7 +27,7 @@ func NewFont(name string) Font {
   for scanner.Scan() {
     text := scanner.Text()
     if fnt.Height == 0 && text[:4] == "flf2" {
-      r, _ := regexp.Compile(`\d`)
+      r, _ := regexp.Compile(`\d+`)
       matches := r. FindAllString(text, -1)
       fnt.Height, _ = strconv.Atoi(matches[1])
     }
@@ -37,13 +37,13 @@ func NewFont(name string) Font {
     cutLength := 1
 
     if counter > 0 {
-      if len(text) > 2 && text[len(text)-2:] == "@@" {
+      if len(text) > 1 && text[len(text)-2:] == "@@" {
         cutLength = 2
       }
       fnt.Letters[counter] = append(fnt.Letters[counter], text[:len(text)-cutLength])
     }
 
-    if len(text) > 2 && text[len(text)-2:] == "@@" {
+    if len(text) > 1 && text[len(text)-2:] == "@@" {
       counter ++
     }
   }
