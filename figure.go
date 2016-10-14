@@ -3,28 +3,39 @@ package figure
 import (
 	"fmt"
 	"log"
+  "strings"
 )
 
-type Figure struct {
-  Phrase string
-  Font Font
+const ascii_offset = 32
+const first_ascii = ' '
+const last_ascii = '~'
+
+type figure struct {
+  phrase string
+  font font
 }
 
-func NewFigure(phrase string, fontName string) Figure {
+func NewFigure(phrase string, fontName string) figure {
+  // TODO error handling for fontname with no flf file
   if fontName == "" {
     fontName = "alphabet"
   }
-  return Figure{ phrase, NewFont(fontName) }
+  return figure{phrase, NewFont(fontName)}
 }
 
-func (fig Figure) Print() {
-  for r := 0 ; r < fig.Font.Height ; r++ {
+func scrubText(text string, char byte) string {
+  return strings.Replace(text, string(char), " ", -1)
+}
+
+func (figure figure) Print() {
+  var font = figure.font
+  for r := 0 ; r < font.height ; r++ {
     printRow := ""
-    for c := 0 ; c < len(fig.Phrase) ; c++ {
-      char := fig.Phrase[c]
-      if char >= ' ' && char <= '~' {
-        fontIndex := char - 32
-        printRow = printRow + fig.Font.Letters[fontIndex][r]
+    for c := 0 ; c < len(figure.phrase) ; c++ {
+      char := figure.phrase[c]
+      if char >= first_ascii && char <= last_ascii {
+        fontIndex := char - ascii_offset
+        printRow = printRow + scrubText(font.letters[fontIndex][r], font.hardBlank)
       } else {
 				log.Fatal("invalid input.")
       }
