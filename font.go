@@ -36,9 +36,11 @@ func NewFont(name string) font {
       setHeight(&font, text)
       setHardBlank(&font, text)
     }
-    if lastCharLine(text) {
-      cutLength = 2
+    if lastCharLine(text, font.height) {
       indexInc = 1
+    }
+    if lastCharLine(text, font.height) && font.height > 1 {
+      cutLength = 2
     }
     if letterIndex > 0 && len(text) > 1 {
       font.letters[letterIndex] = append(font.letters[letterIndex], text[:len(text)-cutLength])
@@ -50,8 +52,7 @@ func NewFont(name string) font {
 
 func setDefaults (font *font) {
   font.hardBlank = ' '
-  spaces := []string{"   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   ", "   "}
-  font.letters[0] = spaces
+  font.letters[0] = make([]string, 100, 100)
   //TODO: MAKE SURE FILE flf EXITS FOR NAME
   if len(font.name) < 1 {
     font.name = "alphabet"
@@ -77,10 +78,18 @@ func growLetters(font *font) {
   font.letters = append(font.letters, []string{})
 }
 
-func lastCharLine(text string) bool {
-  lastChars := "  "
-  if len(text) > 1 {
-    lastChars = text[len(text)-2:]
+func lastCharLine(text string, height int) bool {
+  if height > 1 {
+    lastChars := "  "
+    if len(text) > 1 {
+      lastChars = text[len(text)-2:]
+    }
+    return lastChars == "@@" || lastChars == "##" || lastChars == "$$"
+  } else {
+    lastChar := " "
+    if len(text) > 0 {
+      lastChar = text[len(text)-1:]
+    }
+    return lastChar == "@" || lastChar == "#" || lastChar == "$"
   }
-  return lastChars == "@@" || lastChars == "##" || lastChars == "$$"
 }
