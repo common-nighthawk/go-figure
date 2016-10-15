@@ -1,7 +1,7 @@
 package figure
 
 import (
-	"fmt"
+  "fmt"
   "log"
   "os"
   "regexp"

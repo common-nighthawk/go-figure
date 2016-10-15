@@ -1,8 +1,8 @@
 package figure
 
 import (
-	"fmt"
-	"log"
+  "fmt"
+  "log"
   "strings"
 )
 
@@ -33,7 +33,7 @@ func (figure figure) Print() {
         charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardBlank)
         printRow += charRowText
       } else {
-				log.Fatal("invalid input.")
+        log.Fatal("invalid input.")
       }
     }
     fmt.Println(printRow)
