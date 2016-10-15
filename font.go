@@ -42,8 +42,12 @@ func NewFont(name string) font {
     if lastCharLine(text, font.height) && font.height > 1 {
       cutLength = 2
     }
-    if letterIndex > 0 && len(text) > 1 {
-      font.letters[letterIndex] = append(font.letters[letterIndex], text[:len(text)-cutLength])
+    if letterIndex > 0 {
+      appendText := ""
+      if len(text) > 1 {
+        appendText = text[:len(text)-cutLength]
+      }
+      font.letters[letterIndex] = append(font.letters[letterIndex], appendText)
     }
     letterIndex += indexInc
   }
@@ -55,7 +59,7 @@ func setDefaults (font *font) {
   font.letters[0] = make([]string, 100, 100)
   //TODO: MAKE SURE FILE flf EXITS FOR NAME
   if len(font.name) < 1 {
-    font.name = "alphabet"
+    font.name = "standard"
   }
 }
 
