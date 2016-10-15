@@ -16,22 +16,22 @@ type figure struct {
 }
 
 func NewFigure(phrase string, fontName string) figure {
-  return figure{phrase, NewFont(fontName)}
+  return figure{phrase, newFont(fontName)}
 }
 
-func scrubText(text string, char byte) string {
+func scrub(text string, char byte) string {
   return strings.Replace(text, string(char), " ", -1)
 }
 
 func (figure figure) Print() {
-  var font = figure.font
-  for r := 0 ; r < font.height ; r++ {
+  for r := 0 ; r < figure.font.height ; r++ {
     printRow := ""
     for c := 0 ; c < len(figure.phrase) ; c++ {
       char := figure.phrase[c]
       if char >= first_ascii && char <= last_ascii {
         fontIndex := char - ascii_offset
-        printRow = printRow + scrubText(font.letters[fontIndex][r], font.hardBlank)
+        charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardBlank)
+        printRow += charRowText
       } else {
 				log.Fatal("invalid input.")
       }
