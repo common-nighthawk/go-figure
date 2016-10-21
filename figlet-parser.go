@@ -4,16 +4,15 @@ import (
   "fmt"
   "log"
   "os"
-  "regexp"
   "strconv"
   "strings"
 )
 
+const signature = "flf2"
 var hardBlanksBlacklist = [2]byte{'a', '2'}
 
 func getFile(name string) (file *os.File) {
-  //TODO change path
-  file_path := fmt.Sprintf("../figure/fonts/%s.flf", name)
+  file_path := fmt.Sprintf("../figure/fonts/%s.flf", name) //TODO change path
   file, err := os.Open(file_path)
   if err != nil {
     log.Fatal("invalid font name.")
@@ -22,20 +21,18 @@ func getFile(name string) (file *os.File) {
 }
 
 func getHeight(metadata string) int {
-  r, _ := regexp.Compile(`\d+`)
-  matches := r. FindAllString(metadata, -1)
-  height, _ := strconv.Atoi(matches[1])
+  datum := strings.Fields(metadata)[1]
+  height, _ := strconv.Atoi(datum)
   return height
 }
 
 func getHardBlank(metadata string) byte {
-  r, _ := regexp.Compile(`f\S+\s`)
-  match := r.FindAllString(metadata, -1)[0]
-  hardBlank := match[len(match)-2]
-  if hardBlank != hardBlanksBlacklist[0] && hardBlank != hardBlanksBlacklist[1] {
-    return hardBlank
-  } else {
+  datum := strings.Fields(metadata)[0]
+  hardBlank := datum[len(datum)-1]
+  if hardBlank == hardBlanksBlacklist[0] || hardBlank == hardBlanksBlacklist[1] {
     return ' '
+  } else {
+    return hardBlank
   }
 }
 

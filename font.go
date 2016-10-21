@@ -2,7 +2,6 @@ package figure
 
 import (
   "bufio"
-  "os"
 )
 
 type font struct {
@@ -13,34 +12,42 @@ type font struct {
 }
 
 func newFont(name string) (font font) {
-  setAttributes(&font, name)
+  setName(&font, name)
   file := getFile(font.name)
   defer file.Close()
-  setLetters(&font, file)
+  scanner := bufio.NewScanner(file)
+  setAttributes(&font, scanner)
+  setLetters(&font, scanner)
   return font
 }
 
-func setAttributes(font *font, name string) {
+func setName(font *font, name string) {
   font.name = name
-  growLetters(font)
-  font.letters[0] = make([]string, 100, 100)
   if len(name) < 1 {
     font.name = "standard"
   }
 }
 
-func setLetters(font *font, file *os.File) {
-  letterIndex := 0
-  scanner := bufio.NewScanner(file)
+func setAttributes(font *font, scanner *bufio.Scanner) {
   for scanner.Scan() {
-    text, cutLength, indexInc := scanner.Text(), 1, 0
-    growLetters(font)
-    if font.height == 0 && text[:4] == "flf2" {
+    text := scanner.Text()
+    if text[:4] == signature {
       font.height = getHeight(text)
       font.hardBlank = getHardBlank(text)
+      break
     }
+  }
+}
+
+func setLetters(font *font, scanner *bufio.Scanner) {
+  extendLetters(font)
+  font.letters[0] = make([]string, 100, 100) //TODO: set spaces from flf
+  letterIndex := 0
+  for scanner.Scan() {
+    text, cutLength, letterIndexInc := scanner.Text(), 1, 0
+    extendLetters(font)
     if lastCharLine(text, font.height) {
-      indexInc = 1
+      letterIndexInc = 1
       if font.height > 1 { cutLength = 2 }
     }
     if letterIndex > 0 {
@@ -50,10 +57,10 @@ func setLetters(font *font, file *os.File) {
       }
       font.letters[letterIndex] = append(font.letters[letterIndex], appendText)
     }
-    letterIndex += indexInc
+    letterIndex += letterIndexInc
   }
 }
 
-func growLetters(font *font) {
+func extendLetters(font *font) {
   font.letters = append(font.letters, []string{})
 }
