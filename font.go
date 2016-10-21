@@ -9,6 +9,7 @@ type font struct {
   hardBlank byte
   height int
   letters [][]string
+  reverse bool
 }
 
 func newFont(name string) (font font) {
@@ -34,6 +35,7 @@ func setAttributes(font *font, scanner *bufio.Scanner) {
     if text[:4] == signature {
       font.height = getHeight(text)
       font.hardBlank = getHardBlank(text)
+      font.reverse = getReverse(text)
       break
     }
   }

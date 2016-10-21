@@ -36,6 +36,11 @@ func getHardBlank(metadata string) byte {
   }
 }
 
+func getReverse(metadata string) bool {
+  data := strings.Fields(metadata)
+  return len(data) > 6 && data[6] == "1"
+}
+
 func lastCharLine(text string, height int) bool {
   endOfLine, length := "  ", 2
   if height == 1 && len(text) > 0 {

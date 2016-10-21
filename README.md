@@ -252,7 +252,6 @@ A figure response to func Print(). It provides no return value.
 
 ## TODO
 * Add proper support for spaces
-* Support print direction
 * Do not display below baseline when empty
 * New feature: animation
 * Implement graceful line-wrapping and smushing

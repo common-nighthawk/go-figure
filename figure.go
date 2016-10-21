@@ -16,11 +16,11 @@ type figure struct {
 }
 
 func NewFigure(phrase string, fontName string) figure {
-  return figure{phrase, newFont(fontName)}
-}
-
-func scrub(text string, char byte) string {
-  return strings.Replace(text, string(char), " ", -1)
+  font := newFont(fontName)
+  if font.reverse {
+    phrase = reverse(phrase)
+  }
+  return figure{phrase, font}
 }
 
 func (figure figure) Print() {
@@ -39,3 +39,16 @@ func (figure figure) Print() {
     fmt.Println(printRow)
   }
 }
+
+func scrub(text string, char byte) string {
+  return strings.Replace(text, string(char), " ", -1)
+}
+
+func reverse(s string) string {
+  runes := []rune(s)
+  for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+    runes[i], runes[j] = runes[j], runes[i]
+  }
+  return string(runes)
+}
+
