@@ -30,13 +30,15 @@ func (figure figure) Print() {
       char := figure.phrase[c]
       if char >= first_ascii && char <= last_ascii {
         fontIndex := char - ascii_offset
-        charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardBlank)
+        charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardblank)
         printRow += charRowText
       } else {
         log.Fatal("invalid input.")
       }
     }
-    fmt.Println(printRow)
+    if r < figure.font.baseline || len(strings.TrimSpace(printRow)) > 0 {
+      fmt.Println(printRow)
+    }
   }
 }
 

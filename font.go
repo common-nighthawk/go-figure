@@ -6,10 +6,11 @@ import (
 
 type font struct {
   name string
-  hardBlank byte
   height int
-  letters [][]string
+  baseline int
+  hardblank byte
   reverse bool
+  letters [][]string
 }
 
 func newFont(name string) (font font) {
@@ -34,7 +35,8 @@ func setAttributes(font *font, scanner *bufio.Scanner) {
     text := scanner.Text()
     if text[:4] == signature {
       font.height = getHeight(text)
-      font.hardBlank = getHardBlank(text)
+      font.baseline = getBaseline(text)
+      font.hardblank = getHardblank(text)
       font.reverse = getReverse(text)
       break
     }

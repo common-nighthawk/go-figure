@@ -11,7 +11,7 @@ import (
 const signature = "flf2"
 const reverseFlag = "1"
 var charDelimiters = [3]string{"@", "#", "$"}
-var hardBlanksBlacklist = [2]byte{'a', '2'}
+var hardblanksBlacklist = [2]byte{'a', '2'}
 
 func getFile(name string) (file *os.File) {
   file_path := fmt.Sprintf("../figure/fonts/%s.flf", name) //TODO change path
@@ -28,13 +28,19 @@ func getHeight(metadata string) int {
   return height
 }
 
-func getHardBlank(metadata string) byte {
+func getBaseline(metadata string) int {
+  datum := strings.Fields(metadata)[2]
+  baseline, _ := strconv.Atoi(datum)
+  return baseline
+}
+
+func getHardblank(metadata string) byte {
   datum := strings.Fields(metadata)[0]
-  hardBlank := datum[len(datum)-1]
-  if hardBlank == hardBlanksBlacklist[0] || hardBlank == hardBlanksBlacklist[1] {
+  hardblank := datum[len(datum)-1]
+  if hardblank == hardblanksBlacklist[0] || hardblank == hardblanksBlacklist[1] {
     return ' '
   } else {
-    return hardBlank
+    return hardblank
   }
 }
 
