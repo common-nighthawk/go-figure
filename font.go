@@ -47,8 +47,8 @@ func setLetters(font *font, scanner *bufio.Scanner) {
   letterIndex := 0
   for scanner.Scan() {
     text, cutLength, letterIndexInc := scanner.Text(), 1, 0
-    extendLetters(font)
     if lastCharLine(text, font.height) {
+      extendLetters(font)
       letterIndexInc = 1
       if font.height > 1 { cutLength = 2 }
     }
