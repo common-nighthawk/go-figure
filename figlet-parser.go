@@ -9,6 +9,8 @@ import (
 )
 
 const signature = "flf2"
+const reverseFlag = "1"
+var charDelimiters = [3]string{"@", "#", "$"}
 var hardBlanksBlacklist = [2]byte{'a', '2'}
 
 func getFile(name string) (file *os.File) {
@@ -38,7 +40,7 @@ func getHardBlank(metadata string) byte {
 
 func getReverse(metadata string) bool {
   data := strings.Fields(metadata)
-  return len(data) > 6 && data[6] == "1"
+  return len(data) > 6 && data[6] == reverseFlag
 }
 
 func lastCharLine(text string, height int) bool {
@@ -49,5 +51,7 @@ func lastCharLine(text string, height int) bool {
   if len(text) >= length {
     endOfLine = text[len(text)-length:]
   }
-  return endOfLine == strings.Repeat("@", length) || endOfLine == strings.Repeat("#", length) || endOfLine == strings.Repeat("$", length)
+  return endOfLine == strings.Repeat(charDelimiters[0], length) ||
+           endOfLine == strings.Repeat(charDelimiters[1], length) ||
+           endOfLine == strings.Repeat(charDelimiters[2], length)
 }
