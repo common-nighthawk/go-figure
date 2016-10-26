@@ -2,6 +2,7 @@ package figure
 
 import (
   "bufio"
+  "strings"
 )
 
 type font struct {
@@ -33,7 +34,7 @@ func setName(font *font, name string) {
 func setAttributes(font *font, scanner *bufio.Scanner) {
   for scanner.Scan() {
     text := scanner.Text()
-    if text[:4] == signature {
+    if strings.HasPrefix(text, signature) {
       font.height = getHeight(text)
       font.baseline = getBaseline(text)
       font.hardblank = getHardblank(text)
@@ -45,7 +46,7 @@ func setAttributes(font *font, scanner *bufio.Scanner) {
 
 func setLetters(font *font, scanner *bufio.Scanner) {
   extendLetters(font)
-  font.letters[0] = make([]string, 100, 100) //TODO: set spaces from flf
+  font.letters[0] = make([]string, font.height, font.height) //TODO: set spaces from flf
   letterIndex := 0
   for scanner.Scan() {
     text, cutLength, letterIndexInc := scanner.Text(), 1, 0
