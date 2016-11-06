@@ -24,6 +24,12 @@ func NewFigure(phrase string, fontName string) figure {
 }
 
 func (figure figure) Print() {
+  for _, printRow := range figure.Slicify() {
+    fmt.Println(printRow)
+  }
+}
+
+func (figure figure) Slicify() (rows []string) {
   for r := 0 ; r < figure.font.height ; r++ {
     printRow := ""
     for c := 0 ; c < len(figure.phrase) ; c++ {
@@ -37,9 +43,10 @@ func (figure figure) Print() {
       }
     }
     if r < figure.font.baseline || len(strings.TrimSpace(printRow)) > 0 {
-      fmt.Println(printRow)
+      rows = append(rows, printRow)
     }
   }
+  return rows
 }
 
 func scrub(text string, char byte) string {

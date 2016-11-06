@@ -47,6 +47,9 @@ func setAttributes(font *font, scanner *bufio.Scanner) {
 func setLetters(font *font, scanner *bufio.Scanner) {
   extendLetters(font)
   font.letters[0] = make([]string, font.height, font.height) //TODO: set spaces from flf
+  for i := range font.letters[0] {                           //TODO: set spaces from flf
+    font.letters[0][i] = "  "                                //TODO: set spaces from flf
+  }                                                          //TODO: set spaces from flf
   letterIndex := 0
   for scanner.Scan() {
     text, cutLength, letterIndexInc := scanner.Text(), 1, 0
