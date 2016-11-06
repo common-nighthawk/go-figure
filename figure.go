@@ -2,6 +2,7 @@ package figure
 
 import (
   "fmt"
+  "io"
   "log"
   "strings"
 )
@@ -26,6 +27,12 @@ func NewFigure(phrase string, fontName string) figure {
 func (figure figure) Print() {
   for _, printRow := range figure.Slicify() {
     fmt.Println(printRow)
+  }
+}
+
+func Write(w io.Writer, figure figure) {
+  for _, printRow := range figure.Slicify() {
+    fmt.Fprintf(w, "%v\n", printRow)
   }
 }
 
