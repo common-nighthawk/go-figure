@@ -5,6 +5,7 @@ import (
   "io"
   "log"
   "strings"
+  "time"
 )
 
 const ascii_offset = 32
@@ -27,6 +28,33 @@ func NewFigure(phrase string, fontName string) figure {
 func (figure figure) Print() {
   for _, printRow := range figure.Slicify() {
     fmt.Println(printRow)
+  }
+}
+
+func (figure figure) Scroll(duration int, freq int) {
+  endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
+  figure.phrase = figure.phrase + "   "
+  fmt.Println("\033[H\033[2J")
+  for time.Now().Before(endTime) {
+    chars := strings.Split(figure.phrase, "")
+    chars = append(chars, chars[0])
+    chars = chars[1:len(chars)]
+    newS := strings.Join(chars, "")
+    figure.phrase = newS
+    figure.Print()
+    time.Sleep(time.Duration(freq) * time.Millisecond)
+    fmt.Println("\033[H\033[2J")
+  }
+}
+
+func (figure figure) Blink(duration int, freq int) {
+  endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
+  fmt.Println("\033[H\033[2J")
+  for time.Now().Before(endTime) {
+    figure.Print()
+    time.Sleep(time.Duration(freq) * time.Millisecond)
+    fmt.Println("\033[H\033[2J")
+    time.Sleep(time.Duration(freq) * time.Millisecond)
   }
 }
 
