@@ -5,6 +5,8 @@ import (
   "strings"
 )
 
+const defaultFont = "standard"
+
 type font struct {
   name string
   height int
@@ -15,23 +17,21 @@ type font struct {
 }
 
 func newFont(name string) (font font) {
-  setName(&font, name)
+  font.setName(name)
   file := getFile(font.name)
   defer file.Close()
   scanner := bufio.NewScanner(file)
-  setAttributes(&font, scanner)
-  setLetters(&font, scanner)
+  font.setAttributes(scanner)
+  font.setLetters(scanner)
   return font
 }
 
-func setName(font *font, name string) {
+func (font *font) setName(name string) {
   font.name = name
-  if len(name) < 1 {
-    font.name = "standard"
-  }
+  if len(name) < 1 { font.name = defaultFont }
 }
 
-func setAttributes(font *font, scanner *bufio.Scanner) {
+func (font *font) setAttributes(scanner *bufio.Scanner) {
   for scanner.Scan() {
     text := scanner.Text()
     if strings.HasPrefix(text, signature) {
@@ -44,17 +44,14 @@ func setAttributes(font *font, scanner *bufio.Scanner) {
   }
 }
 
-func setLetters(font *font, scanner *bufio.Scanner) {
-  extendLetters(font)
-  font.letters[0] = make([]string, font.height, font.height) //TODO: set spaces from flf
-  for i := range font.letters[0] {                           //TODO: set spaces from flf
-    font.letters[0][i] = "  "                                //TODO: set spaces from flf
-  }                                                          //TODO: set spaces from flf
+func (font *font) setLetters(scanner *bufio.Scanner) {
+  font.letters = append(font.letters, make([]string, font.height, font.height)) //TODO: set spaces from flf
+  for i := range font.letters[0] { font.letters[0][i] = "  " }                  //TODO: set spaces from flf
   letterIndex := 0
   for scanner.Scan() {
     text, cutLength, letterIndexInc := scanner.Text(), 1, 0
     if lastCharLine(text, font.height) {
-      extendLetters(font)
+      font.letters = append(font.letters, []string{})
       letterIndexInc = 1
       if font.height > 1 { cutLength = 2 }
     }
@@ -69,6 +66,16 @@ func setLetters(font *font, scanner *bufio.Scanner) {
   }
 }
 
-func extendLetters(font *font) {
-  font.letters = append(font.letters, []string{})
+func (font *font) evenLetters() {
+  var longest int
+  for _, letter := range font.letters {
+    if len(letter) > 0 && len(letter[0]) > longest {
+      longest = len(letter[0])
+    }
+  }
+  for _, letter := range font.letters {
+    for i, row := range letter {
+      letter[i] = row + strings.Repeat(" ", longest - len(row))
+    }
+  }
 }

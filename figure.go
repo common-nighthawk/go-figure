@@ -1,8 +1,6 @@
 package figure
 
 import (
-  "fmt"
-  "io"
   "log"
   "strings"
 )
@@ -13,7 +11,7 @@ const last_ascii = '~'
 
 type figure struct {
   phrase string
-  font font
+  font
 }
 
 func NewFigure(phrase string, fontName string) figure {
@@ -22,18 +20,6 @@ func NewFigure(phrase string, fontName string) figure {
     phrase = reverse(phrase)
   }
   return figure{phrase, font}
-}
-
-func (figure figure) Print() {
-  for _, printRow := range figure.Slicify() {
-    fmt.Println(printRow)
-  }
-}
-
-func Write(w io.Writer, figure figure) {
-  for _, printRow := range figure.Slicify() {
-    fmt.Fprintf(w, "%v\n", printRow)
-  }
 }
 
 func (figure figure) Slicify() (rows []string) {
