@@ -11,7 +11,7 @@ const last_ascii = '~'
 
 type figure struct {
   phrase string
-  font font
+  font
 }
 
 func NewFigure(phrase string, fontName string) figure {
