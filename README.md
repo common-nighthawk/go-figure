@@ -178,21 +178,21 @@ returns
 
 `figure.NewFigure("Give your reasons", "doom").Blink(10000, 500, -1)`
 
-![blink](doc/blink.gif "blink")
+![blink](docs/blink.gif "blink")
 
 `figure.NewFigure("I mean, I could...", "basic").Scroll(10000, 200, "right")`
 
 `figure.NewFigure("But why would I want to?", "basic").Scroll(10000, 200, "left")`
 
-![scroll](doc/scroll.gif "scroll")
+![scroll](docs/scroll.gif "scroll")
 
 `figure.NewFigure("It's been waiting for you", "larry3d").Dance(10000, 500)`
 
-![dance](doc/dance.gif "dance")
+![dance](docs/dance.gif "dance")
 
-`figure.Write(w, figure.NewFigure("Hello, It's Me", "standard"))`
+`figure.Write(w, figure.NewFigure("Hello, It's Me", "puffy"))`
 
-![web](doc/web.gif "web")
+![web](docs/web.png "web")
 
 
 ## Supported Fonts
