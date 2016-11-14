@@ -6,7 +6,7 @@ It supports [FIGlet](http://www.figlet.org/) files,
 and most of its features.
 
 This package was inspired by the Ruby gem [artii](https://github.com/miketierney/artii),
-but built from scratch.
+but built from scratch and with a different feature set.
 
 ## Installation
 `go get github.com/common-nighthawk/go-figure`
@@ -29,13 +29,11 @@ func main() {
  | |_| |  / _ \ | | | |  / _ \   \ \ /\ / /   / _ \  | '__| | |  / _` |
  |  _  | |  __/ | | | | | (_) |   \ V  V /   | (_) | | |    | | | (_| |
  |_| |_|  \___| |_| |_|  \___/     \_/\_/     \___/  |_|    |_|  \__,_|
-                                                                       
-
 ```
 
 ## Documentation
 ### Create a Figure
-The constructor take two arguments, the text and font name.
+The constructor takes two arguments, the text and font name.
 If passed an empty string for the font name, a default is provided.
 That is, these are both valid--
 
@@ -43,9 +41,9 @@ That is, these are both valid--
 
 `myFigure := figure.NewFigure("Foo Bar", "alphabet")`
 
-Please note that font names are case sensitive
-and only standard ASCII characters are supported
-(character codes 32-127).
+Please note that
+1. only standard ASCII characters are supported (character codes 32-127) and
+2. font names are case sensitive.
 
 ### Methods: stdout
 #### Print()
@@ -55,8 +53,8 @@ There is no return value.
 
 `myFigure.Print()`
 
-But if you really want to have a good time,
-explore the other methods below.
+But if you're feeling adventurous,
+explore the methods below.
 
 #### Blink(duration, timeOn, timeOff int)
 A figure responds to the func Blink, taking three arguments.
@@ -75,9 +73,9 @@ There is no return value.
 A figure responds to the func Scroll, taking three arguments.
 `duration` is the total time the banner will display, in milliseconds.
 `stillness` is the length of time the text will not move (also in ms).
-So, the lower the stillness the faster the scroll speed.
-`direction` can either be "right" or "left" (case insensitive).
-The direction will be left if an invalid option is passed.
+Therefore, the lower the stillness the faster the scroll speed.
+`direction` can be either "right" or "left" (case insensitive).
+The direction will be left if an invalid option (e.g. "foo") is passed.
 There is no return value.
 
 `myFigure.Scroll(5000, 200, "right")`
@@ -88,7 +86,7 @@ There is no return value.
 A figure responds to the func Dance, taking two arguments.
 `duration` is the total time the banner will display, in milliseconds.
 `freeze` is the length of time between dance moves (also in ms).
-So, the lower the freeze the faster the dancing.
+Therefore, the lower the freeze the faster the dancing.
 There is no return value.
 
 `myFigure.Scroll(5000, 800)`
@@ -102,30 +100,34 @@ func Write is a function that takes two arguments.
 
 `figure.Write(w, myFigure)`
 
-This method is can be useful in adding a nifty banner to a web page--
-`
+This method would be useful, for example, to add a nifty banner to a web page--
+```go
 func landingPage(w http.ResponseWriter, r *http.Request) {
-  figure.Write(w, figure.NewFigure("Hello World", "alphabet"))
-`
+  figure.Write(w, myFigure)
+}
+```
 
 ### Methods: Misc
 #### Slicify() ([]string)
-If you wish to do something outside of the created methods,
-you can always grab the internal slice.
-This should give you a good start to build anything
+If you want to do something outside of the created methods,
+you can grab the internal slice.
+This gives you a good start to build anything
 with the ASCII art, if manually.
 
 A figure responds to the func Slicify,
-and will return the slice of string.
+and will return the slice of strings.
 
 `myFigure.Slicify()`
-returns
-`["FFFF           BBBB         ",
-  "F              B   B        ",
-  "FFF  ooo ooo   BBBB   aa rrr",
-  "F    o o o o   B   B a a r  ",
-  "F    ooo ooo   BBBB  aaa r  "]`
 
+returns
+
+```txt
+["FFFF           BBBB         ",
+ "F              B   B        ",
+ "FFF  ooo ooo   BBBB   aa rrr",
+ "F    o o o o   B   B a a r  ",
+ "F    ooo ooo   BBBB  aaa r  "]
+```
 
 ## More Examples
 `figure.NewFigure("Go-Figure", "isometric1").Print()`
@@ -174,21 +176,26 @@ returns
 #########    "    #########         #########         ####"####                      "    
 ```
 
-`figure.NewFigure("It's been waiting for you", "doom").Blink(10000, 500, -1)`
+`figure.NewFigure("Give your reasons", "doom").Blink(10000, 500, -1)`
 
-![blink](url "blink")
+![blink](doc/blink.gif "blink")
 
-`figure.NewFigure("I mean, I could...", "doom").Scroll(10000, 400, "right")`
-`figure.NewFigure("But why would I want to?", "doom").Scroll(10000, 400, "left"`
+`figure.NewFigure("I mean, I could...", "basic").Scroll(10000, 200, "right")`
 
-![scroll](url "scroll")
+`figure.NewFigure("But why would I want to?", "basic").Scroll(10000, 200, "left")`
 
-`figure.NewFigure("Give your reasons", "doom").Dance(10000, 400)`
+![scroll](doc/scroll.gif "scroll")
 
-![dance](url "dance")
+`figure.NewFigure("It's been waiting for you", "larry3d").Dance(10000, 500)`
+
+![dance](doc/dance.gif "dance")
+
+`figure.Write(w, figure.NewFigure("Hello, It's Me", "standard"))`
+
+![web](doc/web.gif "web")
 
 
-## List of Fonts
+## Supported Fonts
 * 3-d
 * 3x5
 * 5lineoblique
