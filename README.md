@@ -346,7 +346,7 @@ returns
 * weird
 
 ## Contributing
-Because this projects is small, we can dispense with formalities.
+Because this project is small, we can dispense with formality.
 Submit a pull request, open an issue, request a change.
 All good!
 
@@ -354,7 +354,7 @@ All good!
 GitHub stars are helpful.
 Most importantly, they help with discoverability.
 Projects with more stars are displayed higher
-in seach results when people are looking for packages.
+in search results when people are looking for packages.
 Also--they make contributors feel good :)
 
 If you are feeling especially generous,
