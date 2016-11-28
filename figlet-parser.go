@@ -4,6 +4,8 @@ import (
   "fmt"
   "log"
   "os"
+  "path"
+  "runtime"
   "strconv"
   "strings"
 )
@@ -14,8 +16,9 @@ var charDelimiters = [3]string{"@", "#", "$"}
 var hardblanksBlacklist = [2]byte{'a', '2'}
 
 func getFile(name string) (file *os.File) {
-  file_path := fmt.Sprintf("../figure/fonts/%s.flf", name) //TODO change path
-  file, err := os.Open(file_path)
+  _, packageDir, _, _ := runtime.Caller(0)
+  filePath := fmt.Sprintf("%s/fonts/%s.flf", path.Dir(packageDir), name)
+  file, err := os.Open(filePath)
   if err != nil {
     log.Fatal("invalid font name.")
   }
