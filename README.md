@@ -18,7 +18,7 @@ package main
 import("github.com/common-nighthawk/go-figure")
 
 func main() {
-  myFigure := figure.NewFigure("Hello World", "")
+  myFigure := figure.NewFigure("Hello World", "", true)
   myFigure.Print()
 }
 ```
@@ -33,17 +33,37 @@ func main() {
 
 ## Documentation
 ### Create a Figure
-The constructor takes two arguments, the text and font name.
+The constructor takes three arguments: the text, font name, and strict mode.
 If passed an empty string for the font name, a default is provided.
 That is, these are both valid--
 
-`myFigure := figure.NewFigure("Foo Bar", "")`
+`myFigure := figure.NewFigure("Foo Bar", "", true)`
 
-`myFigure := figure.NewFigure("Foo Bar", "alphabet")`
+`myFigure := figure.NewFigure("Foo Bar", "alphabet", true)`
 
-Please note that
-1. only standard ASCII characters are supported (character codes 32-127) and
-2. font names are case sensitive.
+Strict mode dictates how to handle characters outside of standard ASCII.
+When set to true, a non-ASCII character (outside character codes 32-127)
+will cause the program to panic.
+When set to false, these characters are replaced with a question mark ('?').
+Examples of each--
+
+`figure.NewFigure("Foo 👍  Bar", "alphabet", true)`.Print()
+
+```txt
+2016/12/01 19:35:38 invalid input.
+```
+
+`figure.NewFigure("Foo 👍  Bar", "alphabet", false)`.Print()
+
+```txt
+ _____                     ___     ____                 
+ |  ___|   ___     ___     |__ \   | __ )    __ _   _ __ 
+ | |_     / _ \   / _ \      / /   |  _ \   / _` | | '__|
+ |  _|   | (_) | | (_) |    |_|    | |_) | | (_| | | |   
+ |_|      \___/   \___/     (_)    |____/   \__,_| |_|   
+```
+
+Please note that font names are case sensitive.
 
 ### Methods: stdout
 #### Print()
@@ -130,7 +150,7 @@ returns
 ```
 
 ## More Examples
-`figure.NewFigure("Go-Figure", "isometric1").Print()`
+`figure.NewFigure("Go-Figure", "isometric1", true).Print()`
 
 ```
       ___           ___           ___                       ___           ___           ___           ___     
@@ -146,7 +166,7 @@ returns
      \/__/         \/__/                                   \/__/         \/__/         \|__|         \/__/    
 ```
 
-`figure.NewFigure("Foo Bar Pop", "smkeyboard").Print()`
+`figure.NewFigure("Foo Bar Pop", "smkeyboard", true).Print()`
 
 ```
  ____  ____  ____  ____  ____  ____  ____  ____  ____ 
@@ -155,7 +175,7 @@ returns
 |/__\||/__\||/__\||/__\||/__\||/__\||/__\||/__\||/__\|
 ```
 
-`figure.NewFigure("Keep Your Eyes On Me", "rectangles").Print()`
+`figure.NewFigure("Keep Your Eyes On Me", "rectangles", true).Print()`
 
 ```
                                                                                           
@@ -166,7 +186,7 @@ returns
                  |_|                               |___|                                  
 ```
 
-`figure.NewFigure("ABCDEFGHIJ", "eftichess").Print()`
+`figure.NewFigure("ABCDEFGHIJ", "eftichess", true).Print()`
 
 ```
 #########         #########   ___   #########         #########                           
@@ -176,21 +196,21 @@ returns
 #########    "    #########         #########         ####"####                      "    
 ```
 
-`figure.NewFigure("Give your reasons", "doom").Blink(10000, 500, -1)`
+`figure.NewFigure("Give your reasons", "doom", true).Blink(10000, 500, -1)`
 
 ![blink](docs/blink.gif "blink")
 
-`figure.NewFigure("I mean, I could...", "basic").Scroll(10000, 200, "right")`
+`figure.NewFigure("I mean, I could...", "basic", true).Scroll(10000, 200, "right")`
 
-`figure.NewFigure("But why would I want to?", "basic").Scroll(10000, 200, "left")`
+`figure.NewFigure("But why would I want to?", "basic", true).Scroll(10000, 200, "left")`
 
 ![scroll](docs/scroll.gif "scroll")
 
-`figure.NewFigure("It's been waiting for you", "larry3d").Dance(10000, 500)`
+`figure.NewFigure("It's been waiting for you", "larry3d", true).Dance(10000, 500)`
 
 ![dance](docs/dance.gif "dance")
 
-`figure.Write(w, figure.NewFigure("Hello, It's Me", "puffy"))`
+`figure.Write(w, figure.NewFigure("Hello, It's Me", "puffy", true))`
 
 ![web](docs/web.png "web")
 

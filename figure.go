@@ -12,28 +12,31 @@ const last_ascii = '~'
 type figure struct {
   phrase string
   font
+  strict bool
 }
 
-func NewFigure(phrase string, fontName string) figure {
+func NewFigure(phrase, fontName string, strict bool) figure {
   font := newFont(fontName)
   if font.reverse {
     phrase = reverse(phrase)
   }
-  return figure{phrase, font}
+  return figure{phrase, font, strict}
 }
 
 func (figure figure) Slicify() (rows []string) {
   for r := 0 ; r < figure.font.height ; r++ {
     printRow := ""
-    for c := 0 ; c < len(figure.phrase) ; c++ {
-      char := figure.phrase[c]
-      if char >= first_ascii && char <= last_ascii {
-        fontIndex := char - ascii_offset
-        charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardblank)
-        printRow += charRowText
-      } else {
-        log.Fatal("invalid input.")
+    for _, char := range figure.phrase {
+      if char < first_ascii || char > last_ascii {
+        if figure.strict {
+          log.Fatal("invalid input.")
+        } else {
+          char = '?'
+        }
       }
+      fontIndex := char - ascii_offset
+      charRowText := scrub(figure.font.letters[fontIndex][r], figure.font.hardblank)
+      printRow += charRowText
     }
     if r < figure.font.baseline || len(strings.TrimSpace(printRow)) > 0 {
       rows = append(rows, printRow)
