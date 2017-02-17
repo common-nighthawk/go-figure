@@ -3,6 +3,7 @@ package figure
 import (
   "bufio"
   "strings"
+  "io"
 )
 
 const defaultFont = "standard"
@@ -21,6 +22,14 @@ func newFont(name string) (font font) {
   file := getFile(font.name)
   defer file.Close()
   scanner := bufio.NewScanner(file)
+  font.setAttributes(scanner)
+  font.setLetters(scanner)
+  return font
+}
+
+func newFontFromReader(reader io.Reader) (font font) {
+  font.setName("")
+  scanner := bufio.NewScanner(reader)
   font.setAttributes(scanner)
   font.setLetters(scanner)
   return font
