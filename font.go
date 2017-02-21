@@ -28,7 +28,6 @@ func newFont(name string) (font font) {
 }
 
 func newFontFromReader(reader io.Reader) (font font) {
-  font.setName("")
   scanner := bufio.NewScanner(reader)
   font.setAttributes(scanner)
   font.setLetters(scanner)
