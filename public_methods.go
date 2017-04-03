@@ -47,7 +47,7 @@ func (fig figure) Blink(duration, timeOn, timeOff int) {
 
 func (fig figure) Dance(duration, freeze int) {
   endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
-  font := newFont(fig.font.name)
+  font := fig.font                                                             //TODO: change to deep copy
   font.evenLetters()
   figures := []figure{figure{font: font}, figure{font: font}}
   clearScreen()
