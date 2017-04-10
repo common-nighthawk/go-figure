@@ -33,7 +33,21 @@ func main() {
 
 ## Documentation
 ### Create a Figure
-The constructor takes three arguments: the text, font name, and strict mode.
+There are two ways to create a Figure, with
+the method `func NewFigure` and
+the method `func NewFigureWithFont`.
+
+Each constructor takes three arguments: the text, font, and strict mode.
+The difference between the two methods is the font.
+The method signature are:
+```
+func NewFigure(phrase, fontName string, strict bool) figure
+func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure
+```
+
+`NewFigure` requires only the name of the font,
+and attempts to locate the font file on your machine.
+
 If passed an empty string for the font name, a default is provided.
 That is, these are both valid--
 
@@ -41,19 +55,39 @@ That is, these are both valid--
 
 `myFigure := figure.NewFigure("Foo Bar", "alphabet", true)`
 
+Please note that font names are case sensitive.
+
+Because of the separation between the executable (binary)
+Go creates and the source code, this lookup sometimes fails
+(*glaces at Windows*).
+
+Therefore, `NewFigureWithFont` accepts the font file directly.
+Provide the absolute path to the flf.
+You can point to the file the comes with this project
+or you can store the file anywhere you'd like and use that location.
+
+The font files are available in the [fonts folder](https://github.com/common-nighthawk/go-figure/tree/master/fonts)
+and on [figlet.org](http://www.figlet.org/fontdb.cgi).
+
+Here are two examples--
+
+`myFigure := figure.NewFigureWithFont("Foo Bar", "/home/ubuntu/go/src/github.com/common-nighthawk/go-figure/fonts/alphabet.flf", true)`
+
+`myFigure := figure.NewFigureWithFont("Foo Bar", "/home/lib/fonts/alaphabet.flf", true)`
+
 Strict mode dictates how to handle characters outside of standard ASCII.
 When set to true, a non-ASCII character (outside character codes 32-127)
 will cause the program to panic.
 When set to false, these characters are replaced with a question mark ('?').
 Examples of each--
 
-`figure.NewFigure("Foo 👍  Bar", "alphabet", true)`.Print()
+`figure.NewFigure("Foo 👍  Bar", "alphabet", true).Print()`
 
 ```txt
 2016/12/01 19:35:38 invalid input.
 ```
 
-`figure.NewFigure("Foo 👍  Bar", "alphabet", false)`.Print()
+`figure.NewFigure("Foo 👍  Bar", "alphabet", false).Print()`
 
 ```txt
  _____                     ___     ____                 
@@ -62,8 +96,6 @@ Examples of each--
  |  _|   | (_) | | (_) |    |_|    | |_) | | (_| | | |   
  |_|      \___/   \___/     (_)    |____/   \__,_| |_|   
 ```
-
-Please note that font names are case sensitive.
 
 ### Methods: stdout
 #### Print()
@@ -109,7 +141,7 @@ A figure responds to the func Dance, taking two arguments.
 Therefore, the lower the freeze the faster the dancing.
 There is no return value.
 
-`myFigure.Scroll(5000, 800)`
+`myFigure.Dance(5000, 800)`
 
 ### Methods: Writers
 #### Write(w io.Writer, fig figure)
@@ -384,3 +416,4 @@ give a shout to [@cmmn_nighthawk](https://twitter.com/cmmn_nighthawk).
 * Add proper support for spaces
 * More animations
 * Implement graceful line-wrapping and smushing
+* Deep-copy font for Dance (current implementation is destructive)
