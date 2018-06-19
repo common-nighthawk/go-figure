@@ -1,6 +1,7 @@
 package figure
 
 import (
+	"io"
 	"log"
 	"strings"
 )
@@ -17,6 +18,14 @@ type figure struct {
 
 func NewFigure(phrase, fontName string, strict bool) figure {
 	font := newFont(fontName)
+	if font.reverse {
+		phrase = reverse(phrase)
+	}
+	return figure{phrase, font, strict}
+}
+
+func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure {
+	font := newFontFromReader(reader)
 	if font.reverse {
 		phrase = reverse(phrase)
 	}
