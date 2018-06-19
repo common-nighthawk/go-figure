@@ -21,7 +21,7 @@ type font struct {
 
 func newFont(name string) (font font) {
 	font.setName(name)
-	fontBytes, err := Asset(path.Join("fonts", name+".flf"))
+	fontBytes, err := Asset(path.Join("fonts", font.name+".flf"))
 	if err != nil {
 		panic(err)
 	}
