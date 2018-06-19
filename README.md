@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/common-nighthawk/go-figure.svg?branch=master)](https://travis-ci.com/common-nighthawk/go-figure)
+
 # Go Figure
 
 ## Description

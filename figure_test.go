@@ -19,7 +19,7 @@ func ExampleDefault() {
 	myFigure := NewFigure("Hello world", "", true)
 	fmt.Println(myFigure)
 	// Output:
-	// _   _          _   _                                       _       _
+	//   _   _          _   _                                       _       _
 	//  | | | |   ___  | | | |   ___     __      __   ___    _ __  | |   __| |
 	//  | |_| |  / _ \ | | | |  / _ \    \ \ /\ / /  / _ \  | '__| | |  / _` |
 	//  |  _  | |  __/ | | | | | (_) |    \ V  V /  | (_) | | |    | | | (_| |
