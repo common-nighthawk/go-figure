@@ -39,7 +39,7 @@ func (figure figure) Slicify() (rows []string) {
 			printRow += charRowText
 		}
 		if r < figure.font.baseline || len(strings.TrimSpace(printRow)) > 0 {
-			rows = append(rows, strings.TrimSpace(printRow))
+			rows = append(rows, strings.TrimRight(printRow, " "))
 		}
 	}
 	return rows
