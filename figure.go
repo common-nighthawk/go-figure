@@ -3,6 +3,7 @@ package figure
 import (
 	"io"
 	"log"
+	"reflect"
 	"strings"
 )
 
@@ -14,6 +15,7 @@ type figure struct {
 	phrase string
 	font
 	strict bool
+	color  string
 }
 
 func NewFigure(phrase, fontName string, strict bool) figure {
@@ -21,7 +23,18 @@ func NewFigure(phrase, fontName string, strict bool) figure {
 	if font.reverse {
 		phrase = reverse(phrase)
 	}
-	return figure{phrase, font, strict}
+	return figure{phrase: phrase, font: font, strict: strict}
+}
+
+func NewColorFigure(phrase, fontName string, color string, strict bool) figure {
+	color = strings.ToLower(color)
+	if _, found := colors[color]; !found {
+		log.Fatalf("invalid color. must be one of: %s", reflect.ValueOf(colors).MapKeys())
+	}
+
+	fig := NewFigure(phrase, fontName, strict)
+	fig.color = color
+	return fig
 }
 
 func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure {
@@ -29,7 +42,7 @@ func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure {
 	if font.reverse {
 		phrase = reverse(phrase)
 	}
-	return figure{phrase, font, strict}
+	return figure{phrase: phrase, font: font, strict: strict}
 }
 
 func (figure figure) Slicify() (rows []string) {
