@@ -33,6 +33,20 @@ func main() {
  |_| |_|  \___| |_| |_|  \___/     \_/\_/     \___/  |_|    |_|  \__,_|
 ```
 
+You can also make colorful figures:
+
+```go
+package main
+
+import("github.com/common-nighthawk/go-figure")
+
+func main() {
+  myFigure := figure.NewColorFigure("Hello World", "", green, true)
+  myFigure.Print()
+}
+```
+
+
 ## Documentation
 ### Create a Figure
 There are two ways to create a Figure, with
