@@ -36,33 +36,31 @@ func main() {
 You can also make colorful figures:
 
 ```go
-package main
-
-import("github.com/common-nighthawk/go-figure")
-
 func main() {
-  myFigure := figure.NewColorFigure("Hello World", "", green, true)
+  myFigure := figure.NewColorFigure("Hello World", "", "green", true)
   myFigure.Print()
 }
 ```
 
-
 ## Documentation
 ### Create a Figure
-There are two ways to create a Figure, with
-the method `func NewFigure` and
+There are three ways to create a Figure. These are--
+the method `func NewFigure`,
+the method `func NewColorFigure`, and
 the method `func NewFigureWithFont`.
 
-Each constructor takes three arguments: the text, font, and strict mode.
-The difference between the two methods is the font.
+Each constructor takes the arguments: the text, font, and strict mode.
+The "color" constructor takes a color as an additional arg.
+The "with font" specifies the font differently.
 The method signature are:
 ```
 func NewFigure(phrase, fontName string, strict bool) figure
+func NewColorFigure(phrase, fontName string, color string, strict bool) figure
 func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure
 ```
 
-`NewFigure` requires only the name of the font,
-and attempts to locate the font file on your machine.
+`NewFigure` requires only the name of the font, and uses the font file shipped
+with this package stored in bindata.
 
 If passed an empty string for the font name, a default is provided.
 That is, these are both valid--
@@ -73,13 +71,10 @@ That is, these are both valid--
 
 Please note that font names are case sensitive.
 
-Because of the separation between the executable (binary)
-Go creates and the source code, this lookup sometimes fails
-(*glaces at Windows*).
-
-Therefore, `NewFigureWithFont` accepts the font file directly.
+`NewFigureWithFont`, on the other hand, accepts the font file directly.
+This allows you to BYOF (bring your own font).
 Provide the absolute path to the flf.
-You can point to the file the comes with this project
+You can point to a file the comes with this project
 or you can store the file anywhere you'd like and use that location.
 
 The font files are available in the [fonts folder](https://github.com/common-nighthawk/go-figure/tree/master/fonts)
@@ -90,6 +85,13 @@ Here are two examples--
 `myFigure := figure.NewFigureWithFont("Foo Bar", "/home/ubuntu/go/src/github.com/common-nighthawk/go-figure/fonts/alphabet.flf", true)`
 
 `myFigure := figure.NewFigureWithFont("Foo Bar", "/home/lib/fonts/alaphabet.flf", true)`
+
+You can also make colorful figures! The current supported colors are:
+blue, cyan, gray, green, purple, red, white, yellow.
+
+An example--
+
+`myFigure := figure.NewColorFigure("Foo Bar", "", "green", true)
 
 Strict mode dictates how to handle characters outside of standard ASCII.
 When set to true, a non-ASCII character (outside character codes 32-127)
