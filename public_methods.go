@@ -3,6 +3,7 @@ package figure
 import (
 	"fmt"
 	"io"
+	"sort"
 	"strings"
 	"time"
 )
@@ -83,6 +84,16 @@ func (fig figure) Dance(duration, freeze int) {
 func Write(w io.Writer, fig figure) {
 	for _, printRow := range fig.Slicify() {
 		fmt.Fprintf(w, "%v\n", printRow)
+	}
+}
+
+func ListFonts() {
+	arr := AssetNames()
+	sort.Strings(arr)
+	for _, font := range arr {
+		font = strings.TrimPrefix(font, "fonts/")
+		font = strings.TrimSuffix(font, ".flf")
+		println(font)
 	}
 }
 
