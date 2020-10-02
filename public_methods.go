@@ -87,10 +87,14 @@ func Write(w io.Writer, fig figure) {
 	}
 }
 
-func ListFonts() {
+func GetFontList() []string {
 	arr := AssetNames()
 	sort.Strings(arr)
-	for _, font := range arr {
+	return arr
+}
+
+func PrintFontList() {
+	for _, font := range GetFontList() {
 		font = strings.TrimPrefix(font, "fonts/")
 		font = strings.TrimSuffix(font, ".flf")
 		println(font)
