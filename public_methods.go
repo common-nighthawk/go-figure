@@ -88,15 +88,19 @@ func Write(w io.Writer, fig figure) {
 }
 
 func GetFontList() []string {
+	var newArr []string
 	arr := AssetNames()
 	sort.Strings(arr)
-	return arr
+	for _, font := range arr {
+		font = strings.TrimPrefix(font, "fonts/")
+		font = strings.TrimSuffix(font, ".flf")
+		newArr = append(newArr, font)
+	}
+	return newArr
 }
 
 func PrintFontList() {
 	for _, font := range GetFontList() {
-		font = strings.TrimPrefix(font, "fonts/")
-		font = strings.TrimSuffix(font, ".flf")
 		println(font)
 	}
 }
