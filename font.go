@@ -11,21 +11,21 @@ import (
 const defaultFont = "standard"
 
 var colors = map[string]string{
-	"reset":        "\033[0m",
-	"red":          "\033[31m",
-	"green":        "\033[32m",
-	"yellow":       "\033[33m",
-	"blue":         "\033[34m",
-	"purple":       "\033[35m",
-	"cyan":         "\033[36m",
-	"light_red":    "\033[91m",
-	"light_green":  "\033[92m",
-	"light_yellow": "\033[93m",
-	"light_blue":   "\033[94m",
-	"light_purple": "\033[95m",
-	"light_cyan":   "\033[96m",
-	"gray":         "\033[37m",
-	"white":        "\033[97m",
+	"reset":   "\033[0m",
+	"red":     "\033[31m",
+	"green":   "\033[32m",
+	"yellow":  "\033[33m",
+	"blue":    "\033[34m",
+	"purple":  "\033[35m",
+	"cyan":    "\033[36m",
+	"lred":    "\033[91m",
+	"lgreen":  "\033[92m",
+	"lyellow": "\033[93m",
+	"lblue":   "\033[94m",
+	"lpurple": "\033[95m",
+	"lcyan":   "\033[96m",
+	"gray":    "\033[37m",
+	"white":   "\033[97m",
 }
 
 type font struct {
