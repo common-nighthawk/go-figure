@@ -17,6 +17,18 @@ func (fig figure) Print() {
 	}
 }
 
+// returns a colored string
+func (fig figure) ColorString() string {
+	s := ""
+	for _, printRow := range fig.Slicify() {
+		if fig.color != "" {
+			printRow = colors[fig.color] + printRow + colors["reset"]
+		}
+		s += fmt.Sprintf("%s\n", printRow)
+	}
+	return s
+}
+
 func (fig figure) String() string {
 	s := ""
 	for _, printRow := range fig.Slicify() {
