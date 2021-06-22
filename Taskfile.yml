@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+    default:
+        desc: make bindata
+        cmds:
+            - task: bindata
+
+    bindata:
+        cmds:
+            - cmd: go-bindata -o bindata.go fonts/...
+            - cmd: sd "package main" "package figure" bindata.go

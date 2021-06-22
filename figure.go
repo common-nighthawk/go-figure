@@ -3,7 +3,7 @@ package figure
 import (
 	"io"
 	"log"
-	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -29,7 +29,19 @@ func NewFigure(phrase, fontName string, strict bool) figure {
 func NewColorFigure(phrase, fontName string, color string, strict bool) figure {
 	color = strings.ToLower(color)
 	if _, found := colors[color]; !found {
-		log.Fatalf("invalid color. must be one of: %s", reflect.ValueOf(colors).MapKeys())
+		s := ""
+		keys := make([]string, 0, len(colors))
+		for k := range colors {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			if k != "reset" {
+				s += colors[k] + k + " "
+			}
+		}
+		s += colors["reset"]
+		log.Fatalf("invalid color. must be one of: %s", s)
 	}
 
 	fig := NewFigure(phrase, fontName, strict)
