@@ -5,7 +5,11 @@ import (
 	"io"
 	"strings"
 	"time"
+
+	"github.com/mattn/go-colorable"
 )
+
+var Output = colorable.NewColorableStdout()
 
 //stdout
 func (fig figure) Print() {
@@ -13,7 +17,7 @@ func (fig figure) Print() {
 		if fig.color != "" {
 			printRow = colors[fig.color] + printRow + colors["reset"]
 		}
-		fmt.Println(printRow)
+		fmt.Fprintln(Output, printRow)
 	}
 }
 
