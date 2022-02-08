@@ -17,7 +17,7 @@ func (fig figure) Print() {
 		if fig.color != "" {
 			printRow = colors[fig.color] + printRow + colors["reset"]
 		}
-		fmt.Println(Output, printRow)
+		fmt.Fprintln(Output, printRow)
 	}
 }
 
